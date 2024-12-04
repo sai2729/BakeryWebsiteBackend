@@ -1,10 +1,11 @@
 package com.bakery.BakeryManagement.service;
 
-import com.bakery.BakeryManagement.model.UserDTO;
+
 import com.bakery.BakeryManagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.bakery.BakeryManagement.model.User;
 
 import java.util.Optional;
 
