@@ -1,6 +1,6 @@
 package com.bakery.BakeryManagement.service;
 
-import com.bakery.BakeryManagement.model.User;
+import com.bakery.BakeryManagement.model.UserDTO;
 import com.bakery.BakeryManagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,31 +14,27 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public String register(UserDTO userDTO) {
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            return "Email already in use!";
+    public String signup(User user) {
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+        if (existingUser.isPresent()) {
+            return "User already exists!";
         }
-
-        User user = User.builder()
-                .email(userDTO.getEmail())
-                .password(passwordEncoder.encode(userDTO.getPassword()))
-                .name(userDTO.getName())
-                .role(Role.CUSTOMER) // default role
-                .build();
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return "Registration successful!";
+        return "Signup successful!";
     }
 
-    public String login(UserDTO userDTO) {
-        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
-        if (user.isEmpty() || !passwordEncoder.matches(userDTO.getPassword(), user.get().getPassword())) {
-            return "Invalid email or password!";
+    public String login(String username, String password) {
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return "Login successful!";
+            }
+            return "Invalid password!";
         }
-
-        return "Login successful!";
+        return "User not found. Please sign up.";
     }
 }
