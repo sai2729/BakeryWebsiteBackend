@@ -2,10 +2,11 @@ package com.bakery.BakeryManagement.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "products")
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long product_id;
 
     private String name;
     private Double price;
@@ -15,15 +16,33 @@ public class Products {
 
     @Lob
     private byte[] image; // Field to store image data
+    
+    private int quantity;
+    private String Category;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getProduct_id() {
+		return product_id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setProduct_id(Long product_id) {
+		this.product_id = product_id;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getCategory() {
+		return Category;
+	}
+
+	public void setCategory(String category) {
+		Category = category;
+	}
 
     public String getName() {
         return name;

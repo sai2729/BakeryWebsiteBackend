@@ -48,9 +48,11 @@ public class ProductController {
             @RequestParam("price") Double price,
             @RequestParam("description") String description,
             @RequestParam("status") String status,
+            @RequestParam("quantity") int quantity,
+            @RequestParam("category") String category,
             @RequestParam("image") MultipartFile image) {
         try {
-            Products savedProduct = productService.saveProduct(name, price, description, status, image);
+            Products savedProduct = productService.saveProduct(name, price, description, status,quantity,category, image);
             return ResponseEntity.ok(savedProduct);
         } catch (IOException e) {
             e.printStackTrace();
