@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**") // Match API paths
-                        .allowedOrigins("http://localhost:4200") // Angular app's origin
+                        .allowedOrigins("https://bakerywebsite-aab57.web.app/") // Angular app's origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
