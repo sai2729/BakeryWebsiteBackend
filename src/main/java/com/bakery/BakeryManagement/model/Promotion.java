@@ -1,87 +1,98 @@
 package com.bakery.BakeryManagement.model;
-
-package com.example.promotion.entity;
-
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "promotions")
 public class Promotion {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String description;
 
-    private Double discount;
+    @Column(nullable = false)
+    private int discountPercent;
 
-    private LocalDateTime startDate;
+    @Column(nullable = false)
+    private LocalDate startDate;
 
-    private LocalDateTime endDate;
+    @Column(nullable = false)
+    private LocalDate endDate;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by", nullable = false)
-    private User createdBy;
+    @Column(nullable = false)
+    private boolean applyToAll;
+    
+    @Column(nullable = false)
+    private Double minCartValue; // Add this field
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getDiscountPercent() {
+		return discountPercent;
+	}
+
+	public void setDiscountPercent(int discountPercent) {
+		this.discountPercent = discountPercent;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+    public boolean isApplyToAll() { // Custom Getter
+        return applyToAll;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setApplyToAll(boolean applyToAll) {
+        this.applyToAll = applyToAll;
+    }
+    
+    // Getters and setters
+    public Double getMinCartValue() {
+        return minCartValue;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setMinCartValue(Double minCartValue) {
+        this.minCartValue = minCartValue;
     }
 }
-

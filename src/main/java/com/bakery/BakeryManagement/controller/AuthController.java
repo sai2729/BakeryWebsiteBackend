@@ -1,31 +1,47 @@
-package com.example.auth.controller;
+package com.bakery.BakeryManagement.controller;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.example.auth.dto.AuthRequest;
-import com.example.auth.dto.AuthResponse;
-import com.example.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.bakery.BakeryManagement.model.User;
+import com.bakery.BakeryManagement.request.SignInRequest;
+import com.bakery.BakeryManagement.response.SignInResponse;
+import com.bakery.BakeryManagement.service.UserService;
+
 @RestController
 @RequestMapping("/api/auth")
-public class AuthenticationController {
+@CrossOrigin(origins = "http://localhost:4200") // Allow requests from this origin
+public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private UserService userService;
 
-    // Endpoint for user signup
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody AuthRequest authRequest) {
-        String response = authService.registerUser(authRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Map<String, String>> signup(@RequestBody User user) {
+        try {
+            user.setRole(User.Role.CUSTOMER); // Set default role
+            userService.registerUser(user);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User registered successfully");
+            return ResponseEntity.ok(response); // Send a JSON response
+        } catch (IllegalArgumentException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
-
-    // Endpoint for user signin
+    
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@RequestBody AuthRequest authRequest) {
-        AuthResponse response = authService.authenticateUser(authRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> signin(@RequestBody SignInRequest signInRequest) {
+        try {
+            // Authenticate user
+            SignInResponse response = userService.authenticateUser(signInRequest);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
-
