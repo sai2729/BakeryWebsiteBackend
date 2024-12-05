@@ -1,38 +1,53 @@
 package com.bakery.BakeryManagement.controller;
+
+import com.example.promotion.entity.Promotion;
+import com.example.promotion.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.bakery.BakeryManagement.model.Promotion;
-import com.bakery.BakeryManagement.service.PromotionService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/promotions")
-@CrossOrigin
 public class PromotionController {
 
     @Autowired
     private PromotionService promotionService;
 
+    // Create a new promotion
     @PostMapping
     public ResponseEntity<Promotion> createPromotion(@RequestBody Promotion promotion) {
-        if (promotion.isApplyToAll() && promotion.getDiscountPercent() > 0) {
-            Promotion newPromotion = promotionService.createPromotion(promotion);
-            return ResponseEntity.ok(newPromotion);
-        }
-        return ResponseEntity.badRequest().build();
+        Promotion createdPromotion = promotionService.createPromotion(promotion);
+        return ResponseEntity.ok(createdPromotion);
     }
 
+    // Get all promotions
     @GetMapping
     public ResponseEntity<List<Promotion>> getAllPromotions() {
-        return ResponseEntity.ok(promotionService.getAllPromotions());
+        List<Promotion> promotions = promotionService.getAllPromotions();
+        return ResponseEntity.ok(promotions);
     }
 
+    // Get promotion by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Promotion> getPromotionById(@PathVariable Long id) {
+        Promotion promotion = promotionService.getPromotionById(id);
+        return ResponseEntity.ok(promotion);
+    }
+
+    // Update an existing promotion
+    @PutMapping("/{id}")
+    public ResponseEntity<Promotion> updatePromotion(@PathVariable Long id, @RequestBody Promotion promotion) {
+        Promotion updatedPromotion = promotionService.updatePromotion(id, promotion);
+        return ResponseEntity.ok(updatedPromotion);
+    }
+
+    // Delete a promotion
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePromotion(@PathVariable Long id) {
+    public ResponseEntity<String> deletePromotion(@PathVariable Long id) {
         promotionService.deletePromotion(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Promotion deleted successfully!");
     }
 }
+
