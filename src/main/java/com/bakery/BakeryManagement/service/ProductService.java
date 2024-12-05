@@ -23,12 +23,14 @@ public class ProductService {
 
 
     // Save a new product with an image
-    public Products saveProduct(String name, Double price, String description, String status, MultipartFile image) throws IOException {
+    public Products saveProduct(String name, Double price, String description, String status, int quantity, String category, MultipartFile image) throws IOException {
         Products product = new Products();
         product.setName(name);
         product.setPrice(price);
         product.setDescription(description);
         product.setStatus(status);
+        product.setQuantity(quantity);
+        product.setCategory(category);
 
         // Store the image as a byte array
         if (image != null && !image.isEmpty()) {
