@@ -1,4 +1,6 @@
 package com.bakery.BakeryManagement.service;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,5 +44,22 @@ public class UserService {
     public User findById(int userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    }
+    
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    
+    public void updateUserRole(int userId, String newRole) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        try {
+            User.Role role = User.Role.valueOf(newRole.toUpperCase()); // Validate role
+            user.setRole(role);
+            userRepository.save(user);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid role specified");
+        }
     }
 }

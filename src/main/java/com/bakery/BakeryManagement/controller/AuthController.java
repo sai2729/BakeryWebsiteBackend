@@ -1,5 +1,6 @@
 package com.bakery.BakeryManagement.controller;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,26 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+    
+    @PutMapping("/update-role/{userId}")
+    public ResponseEntity<Map<String, String>> updateUserRole(@PathVariable int userId, @RequestBody Map<String, String> requestBody) {
+        try {
+            String newRole = requestBody.get("role");
+            userService.updateUserRole(userId, newRole);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User role updated successfully");
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
 }
